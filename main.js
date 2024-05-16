@@ -7,8 +7,11 @@ import { generateRecommendations } from './src/components/Recommendations/recomm
 import { createModal, setModalClose } from './src/components/Image-Zoom/image-zoom.js';
 import './style.css';
 
-const app = document.querySelector('#app');
-app.innerHTML = `
+//Al generar el HTML con un "await", lo meto en una función asíncrona para
+//que no de problemas en navegadores sin configuración de "top-level" await.
+async function startApp() {
+   const app = document.querySelector('#app');
+   app.innerHTML = `
    <header>
       <div class="flex">
       ${pinterestBar()}
@@ -21,42 +24,45 @@ app.innerHTML = `
    </main>
 `;
 
-//Resto de instruciones para ciertas funcionalidades //
+   //Resto de instruciones para ciertas funcionalidades //
+   //evento de click en las imagenes
+   setClickEvent();
 
-//evento de click en las imagenes
-setClickEvent();
+   //evento de cerrar el modal al clickar la "x"
+   setModalClose();
+   //Listener del buscador para hacer la query cuando se presione enter.
+   const buscador = document.querySelector('#buscar');
 
-//evento de cerrar el modal al clickar la "x"
-setModalClose();
+   buscador.addEventListener('keypress', async (event) => {
+      if (event.key === 'Enter') {
+         const query = event.target.value;
+         //Si hay query, carga los resultados.
+         if (query) {
+            const main = document.querySelector('main');
+            var result = imageSection(await getImages(query));
 
-//Listener del buscador para hacer la query cuando se presione enter.
-const buscador = document.querySelector('#buscar');
-
-buscador.addEventListener('keypress', async (event) => {
-   if (event.key === 'Enter') {
-      const query = event.target.value;
-      //Si hay query, carga los resultados.
-      if (query) {
-         const main = document.querySelector('main');
-         var result = imageSection(await getImages(query));
-
-         ///Ya que necesito generar las recomendaciones con listeners,
-         //me parece más fácil el uso "appendChild" en vez de innerText = `${}`.
-         //Por esta razón, "generateRecommendations()" devuelve elementos, y no strings.
-         if (result['errors']) {
-            const section = generateRecommendations();
-            main.innerHTML = '';
-            main.appendChild(section);
+            ///Ya que necesito generar las recomendaciones con listeners,
+            //me parece más fácil el uso "appendChild" en vez de innerText = `${}`.
+            //Por esta razón, "generateRecommendations()" devuelve elementos, y no strings.
+            if (result['errors']) {
+               const section = generateRecommendations();
+               main.innerHTML = '';
+               main.appendChild(section);
+            } else {
+               main.innerHTML = result;
+               setClickEvent();
+               setModalClose();
+            }
          } else {
-            main.innerHTML = result;
+            //Si no hay query, genera aleatorios. Viene bien para cuando el usuario borra
+            //el input y vuelve a pulsar "enter" sin recargar la página.
+            var main = document.querySelector('main');
+            main.innerHTML = imageSection(await getRandomImages());
+            setClickEvent();
+            setModalClose();
          }
-      } else {
-         //Si no hay query, genera aleatorios. Viene bien para cuando el usuario borra
-         //el input y vuelve a pulsar "enter" sin recargar la página.
-         var main = document.querySelector('main');
-         main.innerHTML = imageSection(await getRandomImages());
       }
-      setClickEvent();
-      setModalClose();
-   }
-});
+   });
+}
+
+startApp();
