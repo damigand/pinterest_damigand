@@ -1,0 +1,38 @@
+.header-button {
+   height: 45px;
+   padding: 0px 15px;
+   background-color: transparent;
+   cursor: pointer;
+   border-radius: 50px;
+   border: none;
+   font-size: 17px;
+}
+
+header .selected {
+   background-color: black;
+   color: white;
+}
+
+.pinterest-bar {
+   gap: 5px;
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+}
+
+.header-button:not(.selected):hover {
+   background-color: whitesmoke;
+}
+
+@media (max-width: 700px) {
+   .pinterest-bar .header-button:nth-child(3),
+   .pinterest-bar .header-button:nth-child(4) {
+      display: none;
+   }
+}
+
+@media (max-width: 410px) {
+   .pinterest-bar .logo-container {
+      display: none;
+   }
+}

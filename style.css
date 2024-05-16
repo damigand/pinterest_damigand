@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap');
+
+:root {
+   --m-margin: 5%;
+   --s-margin: 2%;
+}
+
+* {
+   font-family: 'Ubuntu', sans-serif;
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+header {
+   padding: 2px var(--s-margin);
+   height: 75px;
+   position: sticky;
+   top: 0;
+   left: 0;
+   background-color: white;
+}
+
+header > .flex {
+   display: flex;
+   height: 100%;
+   gap: 15px;
+   padding: 10px 5px;
+}
+
+main {
+   padding: var(--s-margin) var(--m-margin);
+}
+
+@media (max-width: 1100px) {
+   main {
+      padding: var(--s-margin) var(--s-margin);
+   }
+}

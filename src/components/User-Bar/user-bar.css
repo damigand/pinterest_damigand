@@ -1,0 +1,12 @@
+.user-bar {
+   gap: 5px;
+   display: flex;
+   align-items: center;
+}
+
+@media (max-width: 520px) {
+   .user-bar .logo-container:nth-child(1),
+   .user-bar .logo-container:nth-child(2) {
+      display: none;
+   }
+}
